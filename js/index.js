@@ -21,9 +21,20 @@
 
 window.addEventListener('DOMContentLoaded', () => {
   const start = document.querySelector('#start');
+  const time = document.querySelector('#time');
+  const meter = document.querySelector('#meter');
+  const submitBtn = document.querySelector('#btnSubmit');
+  const resetBtn = document.querySelector('#btnReset');
+  const scoreElement = document.querySelector('#score');
+
+  let remainingTime = 60; 
+  // Keeping track if the user submitted the test on time
+  let submitted = false; 
+
   start.addEventListener('click', function (e) {
     document.querySelector('#quizBlock').style.display = 'block';
     start.style.display = 'none';
+    timer();
   });
   // quizArray QUESTIONS & ANSWERS
   // q = QUESTION, o = OPTIONS, a = CORRECT ANSWER
@@ -44,9 +55,19 @@ window.addEventListener('DOMContentLoaded', () => {
       o: ['Sydney', 'Canberra', 'Melbourne', 'Perth'],
       a: 1,
     },
+    {
+      q:'What does CSS stand for?',
+      o:['Colorful Style Sheets', 'Creative Style Sheets', 'Cascading Style Sheets', 'Computer Style Sheets'],
+      a:2,
+    },
+    {
+      q:'What is the name of the CSS selector to style the element with id named car?',
+      o:['.car', '$car', '#car', 'car'],
+      a: 2,
+  }
   ];
 
-  // function to Display the quiz questions and answers from the object
+  // Function to Display the quiz questions and answers from the object
   const displayQuiz = () => {
     const quizWrap = document.querySelector('#quizWrap');
     let quizDisplay = '';
@@ -63,28 +84,66 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  // Calculate the score
+   // Function to display the timer
+   const timer = () => {
+    let countdown = setInterval(() => {    
+      if (submitted){
+        time.innerHTML = 'Great job! You have submitted your answers right on time.'
+      }   
+      else if (remainingTime > 0) {
+        remainingTime--;
+        time.innerHTML =`00:${remainingTime}`
+        meter.setAttribute('value',`${remainingTime}`);
+      } else {
+        time.innerHTML = 'Oops... Your time is up. Try again.'
+        calculateScore();
+      }
+    },1000);
+    }
+
+  // Function to calculate the score
   const calculateScore = () => {
     let score = 0;
     quizArray.map((quizItem, index) => {
       for (let i = 0; i < 4; i++) {
-        //highlight the li if it is the correct answer
         let li = `li_${index}_${i}`;
         let r = `radio_${index}_${i}`;
         liElement = document.querySelector('#' + li);
         radioElement = document.querySelector('#' + r);
 
         if (quizItem.a == i) {
-          //change background color of li element here
-        }
-
+          // if the answer is correct highlight it green
+          liElement.style.backgroundColor = 'green';
+        }  
+          
+        // checking score
         if (radioElement.checked) {
           // code for task 1 goes here
+          if (i == quizItem.a){
+            score++;
+            console.log(`Your score is: ${score}`);
+          } else {
+            // if the answer is incorrect highlight it red
+            liElement.style.backgroundColor = 'red';
+          }
         }
       }
     });
+    scoreElement.innerHTML=`Total score: ${score}`;
+    submitBtn.style.display='none';
+
+    // Checking if user submitted the quiz on time when calculate score function is called.
+    if (remainingTime > 0) {
+      submitted = true;      
+    }
   };
 
-  // call the displayQuiz function
+  // Call the displayQuiz function
   displayQuiz();
+
+// Reload when reset button is clicked
+resetBtn.addEventListener('click',() => window.location.reload());
+submitBtn.addEventListener('click', calculateScore);
+
 });
+
