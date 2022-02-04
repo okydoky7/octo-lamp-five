@@ -88,14 +88,14 @@ window.addEventListener('DOMContentLoaded', () => {
    const timer = () => {
     let countdown = setInterval(() => {    
       if (submitted){
-        time.innerHTML = 'Great job! You have submitted your answers right on time.'
+        time.innerHTML = 'Great job! You have submitted your answers right on time. Check your score.'
       }   
       else if (remainingTime > 0) {
         remainingTime--;
         time.innerHTML =`00:${remainingTime}`
         meter.setAttribute('value',`${remainingTime}`);
       } else {
-        time.innerHTML = 'Oops... Your time is up. Try again.'
+        time.innerHTML = 'Oops... Your time is up. Check your score and try again.'
         calculateScore();
       }
     },1000);
@@ -113,7 +113,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         if (quizItem.a == i) {
           // if the answer is correct highlight it green
-          liElement.style.backgroundColor = 'green';
+          liElement.style.backgroundColor = '#7EE6DA';
         }  
           
         // checking score
@@ -121,15 +121,14 @@ window.addEventListener('DOMContentLoaded', () => {
           // code for task 1 goes here
           if (i == quizItem.a){
             score++;
-            console.log(`Your score is: ${score}`);
           } else {
             // if the answer is incorrect highlight it red
-            liElement.style.backgroundColor = 'red';
+            liElement.style.backgroundColor = '#FFA8B6';
           }
         }
       }
     });
-    scoreElement.innerHTML=`Total score: ${score}`;
+    scoreElement.innerHTML=`Your score: ${score}`;
     submitBtn.style.display='none';
 
     // Checking if user submitted the quiz on time when calculate score function is called.
