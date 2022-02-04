@@ -128,8 +128,8 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       }
     });
-    scoreElement.innerHTML=`Your score: ${score}`;
-    submitBtn.style.display='none';
+    scoreElement.innerHTML = `Your score is ${score} out of 5.`;
+    submitBtn.style.display = 'none';
 
     // Checking if user submitted the quiz on time when calculate score function is called.
     if (remainingTime > 0) {
